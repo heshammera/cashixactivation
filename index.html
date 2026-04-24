@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashix Master Keygen - Mobile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/node-forge/1.3.1/forge.min.js"></script>
+    <style>
+        #authOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #fff;
+            padding: 20px;
+        }
+        #authOverlay .card {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        #authOverlay input {
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --bg: #0f0c29;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --accent: #00f2fe;
+            --success: #00f260;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        textarea, select, input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        textarea:focus, select:focus, input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+        }
+
+        .details-box {
+            background: rgba(0, 210, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: none;
+            border-left: 3px solid var(--primary);
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .option-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .option-item input[type="checkbox"], .option-item input[type="radio"] {
+            width: auto;
+            margin-bottom: 0;
+            accent-color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(to right, var(--secondary), var(--primary));
+            color: #fff;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(58, 123, 213, 0.4);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result-box {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .key-container {
+            background: rgba(0, 242, 96, 0.05);
+            border: 1px dashed var(--success);
+            padding: 15px;
+            border-radius: 12px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--success);
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .copy-badge {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: var(--success);
+            color: #000;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .history-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        #customDaysContainer {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: #000;
+        }
+
+        #historyList {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            position: relative;
+        }
+
+        .history-item .date { color: var(--primary); font-weight: bold; margin-bottom: 5px; }
+        .history-item .key-copy { 
+            position: absolute; 
+            left: 10px; 
+            top: 10px; 
+            background: var(--secondary); 
+            padding: 4px 8px; 
+            border-radius: 6px; 
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
+        .status-dot.online { background: var(--success); box-shadow: 0 0 10px var(--success); }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-small {
+            padding: 10px;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Overlay -->
+    <div id="authOverlay">
+        <div class="card">
+            <h2 style="margin-bottom: 20px; color: var(--primary);">قفل الأمان</h2>
+            <p style="margin-bottom: 20px; font-size: 14px; opacity: 0.8;">الرجاء إدخال كلمة المرور للوصول إلى النظام</p>
+            <input type="password" id="authPassword" placeholder="••••••••••" />
+            <button id="btnAuth">دخول 🔓</button>
+            <p id="authError" style="color: #ff4b2b; display: none; margin-top: 10px; font-size: 12px;">❌ كلمة المرور غير صحيحة</p>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer" style="display: none;">
+        <header>
+            <h1>Cashix Master Keygen</h1>
+            <p>نظام التوليد والمزامنة الذكي</p>
+        </header>
+
+        <div class="sync-status">
+            <div id="syncDot" class="status-dot"></div>
+            <span id="syncText">مزامنة سحابية: غير مفعلة</span>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" id="tabGen">توليد</div>
+            <div class="tab" id="tabHistory">السجل</div>
+            <div class="tab" id="tabSettings">الإعدادات</div>
+        </div>
+
+        <!-- Section: Generation -->
+        <div id="genSection">
+            <div class="card">
+                <label>كود الجهاز (Machine ID)</label>
+                <textarea id="machineCode" rows="3" placeholder="الصق كود الجهاز هنا..."></textarea>
+                
+                <div id="detailsBox" class="details-box"></div>
+
+                <label>الثيم والمدة</label>
+                <div class="grid-options" style="margin-bottom: 10px;">
+                    <select id="themeSelect" style="margin-bottom: 0;">
+                        <option value="0">الافتراضي / سوبرماركت</option>
+                        <option value="1">ملابس (Wear POS)</option>
+                        <option value="2">صيدلية (Smart Cure)</option>
+                    </select>
+                    <select id="durationSelect" style="margin-bottom: 0;">
+                        <option value="life">مدى الحياة</option>
+                        <option value="1m">شهر واحد</option>
+                        <option value="3m">3 أشهر</option>
+                        <option value="6m">6 أشهر</option>
+                        <option value="1y">سنة واحدة</option>
+                        <option value="custom">مخصص بالأيام</option>
+                    </select>
+                </div>
+
+                <div id="customDaysContainer">
+                    <label>عدد الأيام المخصصة</label>
+                    <input type="number" id="customDays" value="7" min="1">
+                </div>
+
+                <label>الأقسام الإضافية</label>
+                <div class="grid-options">
+                    <label class="option-item"><input type="checkbox" id="mod1"> التصنيع</label>
+                    <label class="option-item"><input type="checkbox" id="mod2"> الموظفين</label>
+                    <label class="option-item"><input type="checkbox" id="mod3"> الصيانة</label>
+                    <label class="option-item"><input type="checkbox" id="mod4"> العقود</label>
+                    <label class="option-item"><input type="checkbox" id="mod5"> الخصومات</label>
+                </div>
+
+                <button id="btnGenerate">توليد كود التفعيل ✨</button>
+
+                <div id="resultBox" class="result-box">
+                    <div class="key-container" id="finalKey" style="user-select: all;">
+                        <span class="copy-badge" style="user-select: none;">Master Key</span>
+                        <span id="keyText"></span>
+                    </div>
+                    <button id="btnCopy" style="background: var(--success); color: #000;">نسخ الكود 📋</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: History -->
+        <div id="historySection" style="display: none;">
+            <div class="card">
+                <div id="historyList"></div>
+                <div class="btn-group">
+                    <button id="btnExport" class="btn-small">تصدير السجل 📥</button>
+                    <button id="btnImport" class="btn-small">استيراد سجل 📤</button>
+                </div>
+                <button id="btnClearHistory" class="btn-small" style="background: transparent; color: #ff4b2b; width: 100%; margin-top: 10px;">مسح كافة السجلات 🗑️</button>
+            </div>
+        </div>
+
+        <!-- Section: Settings -->
+        <div id="settingsSection" style="display: none;">
+            <div class="card">
+                <label>إعدادات المزامنة السحابية (Firebase)</label>
+                <p style="font-size: 11px; opacity: 0.6; margin-bottom: 15px;">اربط هاتفك والكمبيوتر عبر حساب Firebase مجاني لمزامنة السجلات لحظياً.</p>
+                
+                <label>رابط قاعدة البيانات (URL)</label>
+                <input type="text" id="fbUrl" placeholder="https://your-project.firebaseio.com">
+                
+                <label>مفتاح المزامنة (Sync Key)</label>
+                <input type="text" id="fbKey" placeholder="مثلاً: my-private-keygen-2024">
+                
+                <button id="btnSaveSync" style="background: var(--secondary);">حفظ وتفعيل المزامنة 💾</button>
+                
+                <hr style="opacity: 0.1; margin: 20px 0;">
+                <div id="debugInfo" style="font-size: 10px; color: #aaa; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+                    <b>حالة الذاكرة:</b> <span id="memStatus">جاري الفحص...</span><br>
+                    <b>آخر حفظ:</b> <span id="lastSave">لا يوجد</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" style="display: none;" accept=".json">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/1.3.1/forge.min.js"></script>
+
+    <script>
+        // --- الإعدادات الافتراضية ---
+        const DEFAULT_FB_URL = "https://activation-11361-default-rtdb.firebaseio.com";
+        const DEFAULT_FB_KEY = "smsm_tota_hesho";
+        // ---------------------------
+
+        const PRIVATE_KEY_XML = `<RSAKeyValue><Modulus>0JC3/RH5+KtoSz0wLrkvD/LpGxOogdeaeNI2O7RAgPydc4vyJqj6OS1iZ23bCJykVjphIQlXkfAuSROdU/Y2VINmR1El8ZhesLprKZx0zP5LP3Ja6CMHAZTmeXUk9xk9JJhYv4S9Yb8LM1MkbgkNh7OLREENTUiyQ8lMKNjTUI3ZrRYcZQnK7+Yr5xZ1Ym1nQhbMJUgERlOBd9vFDZ1DE/X14cLfhshj8xAEOEx7hRU1laOt6fqFnp9YgxVCqDEO/YPp2NrIJ+TMhuNL69j5Y6lXwk1sbw17ZMIM4/geVqU0g3+wdy6i/oRjZP8gfnkZSsNZOOo/qG3mfaL8CZpOOQ==</Modulus><Exponent>AQAB</Exponent><P>+2O3Jm/ReftcNZzdvP0Bzl+ugExSOjAQb72N80XPL0S3NgzObK9lM8zj05V2s4shIpKKbWAEPeP5hf8sgi1kpsGxfv/ucYR11tFIu223ZuhRM4VxgCsMItcAA2QyS51Fqa30bSTAsu0wywx6fwUZdt8ny9u6UuUP7kGHtg/t7Xs=</P><Q>1GPxGP1OxfRESLOpBTeHsIBC9n5yKEgNF9Q7mvcRC+fHCRfsCuAuZeMx79l05L5d2YQUtKGz+FxuritOCWQWPSXv/nS2z/gBBynmQFdhkFqPO1SmQ7pvbNuSuulPOOttXozHs4LP2oqOs7MTvY5EOM6Q6tHoGnjo97RtcwTgkts=</Q><DP>RwkzXNomEFkWAlRUWC4KT527+qcWaTjhvCGNNhwY4puBRfWycwXRDCUuj8BhbXS4JUPRd/y01iRQgyvLEPHwyipblK6PW2Z5wf0bl1L2i07Ee1GO9A+1+zZT26F5kOJdKAhu1FSZWzYpHodlKfVv76Y5YaKycPAnY0UDK1AvBHc=</DP><DQ>rlIxKo+Nvg/Uk89R5MRFDGrZizMRQ1qP1IUPPwuV5C2iQSZvSCXkLyAgdnoG5VAR+1vbGr611h0XgsBsVmzdi+a9ah4lheBKB7UuFJUjsLWDZfD+XgyBM9msPtkLeu5QYBAwQHgXXYnnwjoy85v3BqEUdIdAd6nRnK1sP8E7CY0=</DQ><InverseQ>wASfteWAr//DNUAUxy5hYa44nmlDwWobl7Uhv8DKSHCMNjE9NVsI/uvkvZxCl5Z3CY7JJIQRzZ7raQv++VBj149SU1nLqoYrRhe9xUyOwyMc5ufHWlx6iqUzxThPsJquvMRUPuHIOuylyESIrRYzUXUueUvNRGyR9KhiYIO+7zk=</InverseQ><D>UM0gWs0SGQLfHvcPqapYz0b+hFzzVYpf8BsQo8TLkK1NmqxHHi8s8eXhT8zBpO56xGVNp+zknkd8xxbwRs0Gc2uMvmhz2Mt9M96lEbPplFmYcXYuPe0EE9rKB5gYwBppE7pp95jHfgzzm+jEHlUnhsFKXSEOtDhLx/M+rDyEcZovY1FS4ED8dxiHjeMSOd8n8o4gKTcCAs/qhvXbgrcZTtWUWFvfW2h6S8SEQQBmSHmEwO7T/SFjek7GqAUYlZXxz0KvV4tdJyEp37n1q22L5YOwp/XR26pKs/eb7LL6F02RVoddOcQ29sVlB6tawYUXP54VJvymPe5iTC5NokUq+Q==</D></RSAKeyValue>`;
+
+        const $ = id => document.getElementById(id);
+        let fbRef = null;
+
+        const sanitizeKey = key => key.replace(/[\.\#\$\/\[\]]/g, '_');
+
+        // --- Navigation ---
+        $('tabGen').onclick = () => switchTab('gen');
+        $('tabHistory').onclick = () => switchTab('history');
+        $('tabSettings').onclick = () => switchTab('settings');
+
+        function switchTab(tab) {
+            ['gen', 'history', 'settings'].forEach(t => {
+                $(t + 'Section').style.display = t === tab ? 'block' : 'none';
+                $('tab' + t.charAt(0).toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+            });
+            if (tab === 'history') renderHistory();
+        }
+
+        // --- Core Logic ---
+        // وظيفة لفك تشفير Base64 مع دعم اللغة العربية (UTF-8)
+        function decodeUTF8(str) {
+            try {
+                return decodeURIComponent(escape(atob(str)));
+            } catch (e) {
+                // طريقة بديلة للمتصفحات الحديثة إذا فشلت الأولى
+                try {
+                    const binary = atob(str);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                    return new TextDecoder().decode(bytes);
+                } catch (err) { return null; }
+            }
+        }
+
+        let lastDecodedData = null; // لتخزين بيانات الجهاز المدخل حالياً
+
+        let editingTimestamp = null;
+
+        $('machineCode').oninput = (e) => {
+            const raw = e.target.value.trim();
+            if (!raw) { $('detailsBox').style.display = 'none'; lastDecodedData = null; return; }
+            try {
+                const decoded = decodeUTF8(raw);
+                if (!decoded) throw new Error();
+                lastDecodedData = JSON.parse(decoded);
+                
+                $('detailsBox').innerHTML = `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: right; font-size: 12px;">
+                        <div style="grid-column: span 2; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-bottom: 5px; color: var(--secondary); font-weight: bold;">🖥️ معلومات الجهاز</div>
+                        <div><b>الجهاز:</b> ${lastDecodedData.ComputerName || '---'}</div>
+                        <div><b>الرام:</b> ${lastDecodedData.RamAmount || '---'}</div>
+                        <div style="grid-column: span 2;"><b>المعالج:</b> <span style="font-family: monospace; font-size: 10px; opacity: 0.8;">${lastDecodedData.ProcessorId || '---'}</span></div>
+                        <div style="grid-column: span 2; border-bottom: 1px solid rgba(255,255,255,0.1); padding-top: 10px; padding-bottom: 5px; margin-bottom: 5px; color: var(--secondary); font-weight: bold;">🏢 بيانات المنشأة</div>
+                        <div style="grid-column: span 2;"><b>الشركة:</b> ${lastDecodedData.CompanyName || '---'}</div>
+                        <div><b>المدير:</b> ${lastDecodedData.CompanyManager || '---'}</div>
+                        <div><b>الهاتف:</b> ${lastDecodedData.CompanyPhone || '---'}</div>
+                    </div>
+                    <p style="font-size: 10px; opacity: 0.5; margin-top: 10px; text-align: center;">(سيتم حفظ كافة البيانات في السجل عند التوليد)</p>
+                `;
+                $('detailsBox').style.display = 'block';
+            } catch (err) {
+                $('detailsBox').innerHTML = '<span style="color: #ff4b2b;">❌ كود غير صالح أو تالف</span>';
+                $('detailsBox').style.display = 'block';
+                lastDecodedData = null;
+            }
+        };
+
+        $('btnGenerate').onclick = async () => {
+            if (typeof forge === 'undefined') return alert('⚠️ خطأ: لم يتم تحميل مكتبة التشفير.');
+            const machineCode = $('machineCode').value.trim();
+            if (!machineCode) return alert('يرجى إدخال كود الجهاز');
+            
+            try {
+                const duration = $('durationSelect').value;
+                const now = new Date();
+                if (duration === '1m') now.setMonth(now.getMonth() + 1);
+                else if (duration === '3m') now.setMonth(now.getMonth() + 3);
+                else if (duration === '6m') now.setMonth(now.getMonth() + 6);
+                else if (duration === '1y') now.setFullYear(now.getFullYear() + 1);
+                else if (duration === 'custom') now.setDate(now.getDate() + parseInt($('customDays').value));
+
+                // الهيكل الصافي الذي يفهمه برنامج الكمبيوتر فقط
+                const payload = {
+                    MachineId: machineCode,
+                    T: parseInt($('themeSelect').value),
+                    E: duration === 'life' ? null : now.toISOString().split('T')[0],
+                    M1: $('mod1').checked, 
+                    M2: $('mod2').checked, 
+                    M3: $('mod3').checked, 
+                    M4: $('mod4').checked, 
+                    M5: $('mod5').checked
+                };
+
+                const payloadJson = JSON.stringify(payload);
+                const privateKey = forge.pki.privateKeyFromData(PRIVATE_KEY_XML);
+                const md = forge.md.sha256.create();
+                md.update(payloadJson, 'utf8');
+                const signature = privateKey.sign(md);
+                const finalKey = btoa(unescape(encodeURIComponent(payloadJson))) + "." + forge.util.encode64(signature);
+                
+                $('keyText').innerText = finalKey;
+                $('resultBox').style.display = 'block';
+                $('btnCopy').onclick = () => copyText(finalKey);
+                
+                // حفظ السجل مع البيانات الإضافية للتتبع الداخلي فقط
+                await saveRecord({ 
+                    ...payload, 
+                    Key: finalKey, 
+                    Timestamp: new Date().toISOString(),
+                    MachineInfo: lastDecodedData 
+                });
+            } catch (err) { alert('خطأ: ' + err.message); }
+        };
+
+        // --- Data Management ---
+        async function saveRecord(record) {
+            let history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
+            if (editingTimestamp) {
+                const idx = history.findIndex(h => h.Timestamp === editingTimestamp);
+                if (idx !== -1) {
+                    history[idx] = { ...history[idx], ...record, Timestamp: editingTimestamp };
+                } else {
+                    history.unshift(record);
+                }
+                editingTimestamp = null;
+            } else {
+                history.unshift(record);
+            }
+            localStorage.setItem('cashix_history', JSON.stringify(history));
+            if (fbRef) fbRef.set(history);
+        }
+
+        function renderHistory() {
+            const history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
+            $('historyList').innerHTML = history.length ? history.map((item, idx) => {
+                const info = item.MachineInfo || {};
+                return `
+                <div class="history-item">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span class="date">${new Date(item.Timestamp).toLocaleString('ar-EG')}</span>
+                        <div style="position: absolute; left: 10px; top: 10px; display: flex; gap: 5px;">
+                            <span style="background: var(--primary); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; color: #000;" onclick="editRecord('${item.Timestamp}')">تعديل ✏️</span>
+                            <span style="background: var(--secondary); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px;" onclick="copyText('${item.Key}')">نسخ 📋</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; font-weight: bold; color: var(--secondary);">${info.CompanyName || 'عميل غير معروف'}</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">👤 ${info.CompanyManager || '---'} | 🖥️ ${info.ComputerName || item.MachineId.substring(0, 8)}</div>
+                    
+                    <details style="font-size: 11px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px;">
+                        <summary style="cursor: pointer; color: var(--secondary); margin-bottom: 5px;">عرض التفاصيل الكاملة 🔍</summary>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 5px; margin-top: 5px;">
+                            <div><b>المعالج:</b> ${info.ProcessorId || '---'}</div>
+                            <div><b>الهاردسك:</b> ${info.HDDId || '---'}</div>
+                            <div><b>الرام:</b> ${info.RamAmount || '---'}</div>
+                            <div><b>النشاط:</b> ${item.T === 2 ? 'صيدلية' : (item.T === 1 ? 'ملابس' : 'تجزئة')}</div>
+                            <div><b>الجوال:</b> ${info.CompanyMobile || '---'}</div>
+                            <div><b>العنوان:</b> ${info.CompanyAddress || '---'}</div>
+                            <div style="grid-column: span 2;"><b>تاريخ الانتهاء:</b> ${item.E || 'دائم (مدى الحياة)'}</div>
+                        </div>
+                    </details>
+                </div>
+                `;
+            }).join('') : '<p style="text-align: center; opacity: 0.5;">لا يوجد سجلات</p>';
+        }
+
+        window.copyText = (text) => {
+            navigator.clipboard.writeText(text).then(() => alert('تم نسخ كود التفعيل!'));
+        };
+
+        window.editRecord = (timestamp) => {
+            const history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
+            const item = history.find(h => h.Timestamp === timestamp);
+            if (!item) return;
+
+            editingTimestamp = timestamp;
+            
+            $('machineCode').value = item.MachineId;
+            $('machineCode').dispatchEvent(new Event('input'));
+            
+            $('themeSelect').value = item.T;
+            
+            if (!item.E) {
+                $('durationSelect').value = 'life';
+            } else {
+                $('durationSelect').value = 'custom';
+                const now = new Date();
+                const exp = new Date(item.E);
+                let diffDays = Math.ceil(Math.abs(exp - now) / (1000 * 60 * 60 * 24));
+                if (diffDays < 1) diffDays = 1;
+                $('customDays').value = diffDays;
+            }
+            $('durationSelect').dispatchEvent(new Event('change'));
+
+            $('mod1').checked = item.M1 || false;
+            $('mod2').checked = item.M2 || false;
+            $('mod3').checked = item.M3 || false;
+            $('mod4').checked = item.M4 || false;
+            $('mod5').checked = item.M5 || false;
+
+            switchTab('gen');
+            window.scrollTo(0, 0);
+            alert('قم بتعديل الأقسام ثم اضغط على "توليد كود التفعيل" ليتم تحديث السجل بدل إضافته كجديد.');
+        };
+
+        // --- Export / Import ---
+        $('btnExport').onclick = () => {
+            const data = localStorage.getItem('cashix_history') || '[]';
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Cashix_Backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        };
+
+        $('btnImport').onclick = () => $('fileInput').click();
+        $('fileInput').onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = async (ev) => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    localStorage.setItem('cashix_history', JSON.stringify(data));
+                    if (fbRef) fbRef.set(data);
+                    alert('تم استيراد البيانات بنجاح!');
+                    renderHistory();
+                } catch { alert('ملف غير صالح!'); }
+            };
+            reader.readAsText(file);
+        };
+
+        // --- Firebase Sync ---
+        $('btnSaveSync').onclick = () => {
+            const url = $('fbUrl').value.trim();
+            const key = sanitizeKey($('fbKey').value.trim());
+            if (!url || !key) return alert('أدخل الرابط والمفتاح أولاً');
+            
+            try {
+                localStorage.setItem('fb_config', JSON.stringify({ url, key, savedAt: new Date().toISOString() }));
+                alert('✅ تم حفظ الإعدادات');
+                updateDebugInfo();
+                initFirebase();
+            } catch (e) {
+                alert('❌ المتصفح يمنع الحفظ!');
+            }
+        };
+
+        function updateDebugInfo() {
+            try {
+                const configStr = localStorage.getItem('fb_config');
+                if (configStr) {
+                    const data = JSON.parse(configStr);
+                    $('memStatus').innerText = 'تعمل ✅';
+                    $('lastSave').innerText = new Date(data.savedAt).toLocaleString('ar-EG');
+                } else {
+                    $('memStatus').innerText = 'فارغة ⚠️';
+                }
+            } catch (e) {
+                $('memStatus').innerText = 'معطلة';
+            }
+        }
+
+        function initFirebase() {
+            let config = { url: DEFAULT_FB_URL, key: DEFAULT_FB_KEY };
+            try {
+                const configStr = localStorage.getItem('fb_config');
+                if (configStr) {
+                    const data = JSON.parse(configStr);
+                    config = { url: data.url, key: sanitizeKey(data.key) };
+                }
+            } catch(e) {}
+
+            $('fbUrl').value = config.url;
+            $('fbKey').value = config.key;
+
+            if (typeof firebase === 'undefined') {
+                $('syncText').innerText = '⚠️ خطأ: فشل تحميل مكتبة المزامنة';
+                return;
+            }
+
+            try {
+                if (firebase.apps.length === 0) firebase.initializeApp({ databaseURL: config.url });
+                
+                firebase.database().ref(".info/connected").on("value", (snap) => {
+                    if (snap.val() === true) {
+                        $('syncDot').classList.add('online');
+                        $('syncText').innerText = 'مزامنة سحابية: متصلة ✅';
+                    } else {
+                        $('syncDot').classList.remove('online');
+                        $('syncText').innerText = 'مزامنة سحابية: جاري الاتصال... ⏳';
+                    }
+                });
+
+                fbRef = firebase.database().ref('keys/' + sanitizeKey(config.key));
+                fbRef.on('value', (snap) => {
+                    const data = snap.val();
+                    if (data && Array.isArray(data)) {
+                        localStorage.setItem('cashix_history', JSON.stringify(data));
+                        renderHistory();
+                    }
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        // --- RSA Helper (node-forge) ---
+        forge.pki.privateKeyFromData = function(xml) {
+            const extract = (tag) => forge.util.decode64(xml.match(new RegExp(`<${tag}>(.*?)</${tag}>`))[1]);
+            return forge.pki.setRsaPrivateKey(
+                new forge.jsbn.BigInteger(forge.util.bytesToHex(extract('Modulus')), 16),
+                new forge.jsbn.BigInteger(forge.util.bytesToHex(extract('Exponent')), 16),
+                new forge.jsbn.BigInteger(forge.util.bytesToHex(extract('D')), 16),
+                new forge.jsbn.BigInteger(forge.util.bytesToHex(extract('P')), 16),
+                new forge.jsbn.BigInteger(forge.util.bytesToHex(extract('Q')), 16),
+                new forge.jsbn.BigInteger(forge.util.bytesToHex(extract('DP')), 16),
+                new forge.jsbn.BigInteger(forge.util.bytesToHex(extract('DQ')), 16),
+                new forge.jsbn.BigInteger(forge.util.bytesToHex(extract('InverseQ')), 16)
+            );
+        };
+        window.addEventListener('load', () => {
+            const authOverlay = $('authOverlay');
+            const mainContainer = $('mainContainer');
+            const authPassword = $('authPassword');
+            const btnAuth = $('btnAuth');
+            const authError = $('authError');
+
+            function checkAuth() {
+                if (authPassword.value === 'smsm.tota.hesho') {
+                    authOverlay.style.display = 'none';
+                    mainContainer.style.display = 'block';
+                    sessionStorage.setItem('auth', 'true');
+                } else {
+                    authError.style.display = 'block';
+                    authPassword.value = '';
+                }
+            }
+
+            if (sessionStorage.getItem('auth') === 'true') {
+                authOverlay.style.display = 'none';
+                mainContainer.style.display = 'block';
+            } else {
+                authOverlay.style.display = 'flex';
+                mainContainer.style.display = 'none';
+            }
+
+            btnAuth.onclick = checkAuth;
+            authPassword.onkeypress = (e) => {
+                if (e.key === 'Enter') checkAuth();
+            };
+
+            initFirebase();
+            updateDebugInfo();
+            renderHistory();
+
+            const durSelect = $('durationSelect');
+            const customBox = $('customDaysContainer');
+
+            function toggleCustom() {
+                customBox.style.display = (durSelect.value === 'custom') ? 'block' : 'none';
+            }
+
+            // تفعيل المستمع
+            durSelect.addEventListener('change', toggleCustom);
+            
+            // فحص الحالة عند التحميل
+            toggleCustom();
+        });
+    </script>
+</body>
+</html>
