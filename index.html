@@ -309,6 +309,50 @@
             background: rgba(255, 255, 255, 0.1);
             box-shadow: none;
         }
+
+        /* New CSS */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); z-index: 10000;
+            display: none; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: #1a1a2e; border: 1px solid var(--primary);
+            border-radius: 15px; width: 90%; max-width: 500px; max-height: 90vh;
+            overflow-y: auto; padding: 20px; box-shadow: 0 10px 30px rgba(0,210,255,0.2);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute; top: 15px; left: 15px; background: transparent;
+            border: none; color: #ff4b2b; font-size: 20px; cursor: pointer;
+            box-shadow: none; width: auto; padding: 0; margin: 0;
+        }
+        .stat-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05); padding: 15px 10px; border-radius: 12px;
+            text-align: center; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-num { font-size: 20px; font-weight: bold; color: var(--primary); }
+        .stat-label { font-size: 11px; opacity: 0.7; }
+        .badge {
+            padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: bold;
+        }
+        .badge-green { background: rgba(0, 242, 96, 0.2); color: #00f260; border: 1px solid #00f260; }
+        .badge-yellow { background: rgba(255, 193, 7, 0.2); color: #ffc107; border: 1px solid #ffc107; }
+        .badge-red { background: rgba(255, 75, 43, 0.2); color: #ff4b2b; border: 1px solid #ff4b2b; }
+        .search-box {
+            width: 100%; padding: 12px 40px 12px 12px; background: rgba(0,0,0,0.3) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2300d2ff" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat right 12px center;
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff;
+            margin-bottom: 20px; font-family: 'Cairo', sans-serif;
+        }
+        .deleted-item { opacity: 0.7; filter: grayscale(50%); border-color: rgba(255,75,43,0.3) !important; }
+        .section-title { font-size: 14px; color: var(--primary); margin: 20px 0 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; font-weight: bold; }
+        .modal-section { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .modal-section-title { font-size: 13px; color: var(--secondary); margin-bottom: 10px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -379,6 +423,9 @@
                     <label class="option-item"><input type="checkbox" id="mod5"> الخصومات</label>
                 </div>
 
+                <label>ملاحظات السجل (اختياري)</label>
+                <input type="text" id="recordNotes" placeholder="مثال: تجديد اشتراك عميل قديم...">
+
                 <button id="btnGenerate">توليد كود التفعيل ✨</button>
 
                 <div id="resultBox" class="result-box">
@@ -394,12 +441,33 @@
         <!-- Section: History -->
         <div id="historySection" style="display: none;">
             <div class="card">
+                <div class="stat-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-num" id="statTotal">0</div>
+                        <div class="stat-label">إجمالي السجلات</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="statActive" style="color: #00f260;">0</div>
+                        <div class="stat-label">نشط / صالح</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" id="statExpired" style="color: #ffc107;">0</div>
+                        <div class="stat-label">منتهي الصلاحية</div>
+                    </div>
+                </div>
+
+                <input type="text" id="searchHistory" class="search-box" placeholder="بحث باسم الشركة، الجهاز، الملاحظات...">
+
                 <div id="historyList"></div>
+
+                <div class="section-title" id="deletedTitle" style="display: none;">🗑️ السجلات المحذوفة</div>
+                <div id="deletedList"></div>
+
                 <div class="btn-group">
                     <button id="btnExport" class="btn-small">تصدير السجل 📥</button>
                     <button id="btnImport" class="btn-small">استيراد سجل 📤</button>
                 </div>
-                <button id="btnClearHistory" class="btn-small" style="background: transparent; color: #ff4b2b; width: 100%; margin-top: 10px;">مسح كافة السجلات 🗑️</button>
+                <button id="btnClearHistory" class="btn-small" style="background: transparent; color: #ff4b2b; width: 100%; margin-top: 10px; border: 1px solid rgba(255,75,43,0.3);">نقل السجلات النشطة لسلة المحذوفات 🗑️</button>
             </div>
         </div>
 
@@ -423,6 +491,16 @@
                     <b>آخر حفظ:</b> <span id="lastSave">لا يوجد</span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">✖</button>
+            <h2 style="color: var(--primary); margin-bottom: 20px; font-size: 18px; text-align: center;">📄 تفاصيل التفعيل</h2>
+            <div id="modalBody"></div>
+            <button id="btnPrintModal" style="margin-top: 20px; background: var(--secondary);">طباعة السجل 🖨️</button>
         </div>
     </div>
 
@@ -459,6 +537,16 @@
         }
 
         // --- Core Logic ---
+        function formatRam(raw) {
+            if (!raw) return '---';
+            const num = parseFloat(raw);
+            if (isNaN(num)) return raw;
+            if (num >= 1073741824) return (num / 1073741824).toFixed(1) + ' GB';
+            if (num >= 1048576) return (num / 1048576).toFixed(0) + ' MB';
+            if (num >= 1024) return (num / 1024).toFixed(0) + ' KB';
+            return num + ' Bytes';
+        }
+
         // وظيفة لفك تشفير Base64 مع دعم اللغة العربية (UTF-8)
         function decodeUTF8(str) {
             try {
@@ -490,7 +578,7 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: right; font-size: 12px;">
                         <div style="grid-column: span 2; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-bottom: 5px; color: var(--secondary); font-weight: bold;">🖥️ معلومات الجهاز</div>
                         <div><b>الجهاز:</b> ${lastDecodedData.ComputerName || '---'}</div>
-                        <div><b>الرام:</b> ${lastDecodedData.RamAmount || '---'}</div>
+                        <div><b>الرام:</b> ${formatRam(lastDecodedData.RamAmount)}</div>
                         <div style="grid-column: span 2;"><b>المعالج:</b> <span style="font-family: monospace; font-size: 10px; opacity: 0.8;">${lastDecodedData.ProcessorId || '---'}</span></div>
                         <div style="grid-column: span 2; border-bottom: 1px solid rgba(255,255,255,0.1); padding-top: 10px; padding-bottom: 5px; margin-bottom: 5px; color: var(--secondary); font-weight: bold;">🏢 بيانات المنشأة</div>
                         <div style="grid-column: span 2;"><b>الشركة:</b> ${lastDecodedData.CompanyName || '---'}</div>
@@ -547,6 +635,7 @@
                 // حفظ السجل مع البيانات الإضافية للتتبع الداخلي فقط
                 await saveRecord({ 
                     ...payload, 
+                    Notes: $('recordNotes').value,
                     Key: finalKey, 
                     Timestamp: new Date().toISOString(),
                     MachineInfo: lastDecodedData 
@@ -572,38 +661,245 @@
             if (fbRef) fbRef.set(history);
         }
 
+        function getActiveModules(item) {
+            const modules = [];
+            if (item.M1) modules.push('🏭 التصنيع');
+            if (item.M2) modules.push('👥 الموظفين');
+            if (item.M3) modules.push('🔧 الصيانة');
+            if (item.M4) modules.push('📝 العقود');
+            if (item.M5) modules.push('🏷️ الخصومات');
+            return modules.length ? modules.join(' • ') : 'أقسام أساسية فقط';
+        }
+
+        function getDurationInfo(item) {
+            if (!item.E) return { label: '♾️ مدى الحياة', status: 'green' };
+            const exp = new Date(item.E);
+            const now = new Date();
+            const diff = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+            if (diff < 0) return { label: `⛔ منتهي منذ ${Math.abs(diff)} يوم`, status: 'red' };
+            if (diff <= 30) return { label: `⚠️ ${diff} يوم متبقٍ`, status: 'yellow' };
+            return { label: `✅ ${diff} يوم متبقٍ`, status: 'green' };
+        }
+
         function renderHistory() {
             const history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
-            $('historyList').innerHTML = history.length ? history.map((item, idx) => {
+            const searchTerm = ($('searchHistory') ? $('searchHistory').value || '' : '').toLowerCase();
+            
+            let activeCount = 0;
+            let expiredCount = 0;
+            let totalActive = 0;
+
+            const filtered = history.filter(item => {
                 const info = item.MachineInfo || {};
-                return `
-                <div class="history-item">
+                const searchStr = `${info.CompanyName||''} ${info.ComputerName||''} ${item.Notes||''} ${item.MachineId||''}`.toLowerCase();
+                return searchStr.includes(searchTerm);
+            });
+
+            const activeList = [];
+            const deletedList = [];
+
+            filtered.forEach(item => {
+                const isDeleted = item.IsDeleted === true;
+                const info = item.MachineInfo || {};
+                const durInfo = getDurationInfo(item);
+                const themes = { 0: '🛒 سوبرماركت', 1: '👔 ملابس', 2: '💊 صيدلية' };
+                const themeName = themes[item.T] || '---';
+
+                if (!isDeleted) {
+                    totalActive++;
+                    if (durInfo.status === 'red') expiredCount++;
+                    else activeCount++;
+                }
+
+                const html = `
+                <div class="history-item ${isDeleted ? 'deleted-item' : ''}">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span class="date">${new Date(item.Timestamp).toLocaleString('ar-EG')}</span>
-                        <div style="position: absolute; left: 10px; top: 10px; display: flex; gap: 5px;">
-                            <span style="background: var(--primary); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; color: #000;" onclick="editRecord('${item.Timestamp}')">تعديل ✏️</span>
-                            <span style="background: var(--secondary); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px;" onclick="copyText('${item.Key}')">نسخ 📋</span>
+                        <div>
+                            <span class="date">${new Date(item.Timestamp).toLocaleString('ar-EG')}</span>
+                            ${isDeleted ? `<span class="badge badge-red" style="margin-right:5px;">🗑️ محذوف</span>` : ''}
+                        </div>
+                        <div style="display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end;">
+                            ${isDeleted ? `
+                                <span style="background: var(--success); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; color: #000; font-weight: bold;" onclick="restoreRecord('${item.Timestamp}')">استعادة ↩️</span>
+                                <span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px;" onclick="previewRecord('${item.Timestamp}')">معاينة 👁️</span>
+                            ` : `
+                                <span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px;" onclick="previewRecord('${item.Timestamp}')">معاينة 👁️</span>
+                                <span style="background: var(--primary); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; color: #000; font-weight: bold;" onclick="editRecord('${item.Timestamp}')">تعديل ✏️</span>
+                                <span style="background: var(--secondary); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: bold;" onclick="copyText('${item.Key}')">نسخ 📋</span>
+                                <span style="background: rgba(255,75,43,0.8); padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 10px;" onclick="deleteRecord('${item.Timestamp}')">حذف 🗑️</span>
+                            `}
                         </div>
                     </div>
                     <div style="font-size: 14px; font-weight: bold; color: var(--secondary);">${info.CompanyName || 'عميل غير معروف'}</div>
                     <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">👤 ${info.CompanyManager || '---'} | 🖥️ ${info.ComputerName || item.MachineId.substring(0, 8)}</div>
                     
-                    <details style="font-size: 11px; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px;">
-                        <summary style="cursor: pointer; color: var(--secondary); margin-bottom: 5px;">عرض التفاصيل الكاملة 🔍</summary>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 5px; margin-top: 5px;">
-                            <div><b>المعالج:</b> ${info.ProcessorId || '---'}</div>
-                            <div><b>الهاردسك:</b> ${info.HDDId || '---'}</div>
-                            <div><b>الرام:</b> ${info.RamAmount || '---'}</div>
-                            <div><b>النشاط:</b> ${item.T === 2 ? 'صيدلية' : (item.T === 1 ? 'ملابس' : 'تجزئة')}</div>
-                            <div><b>الجوال:</b> ${info.CompanyMobile || '---'}</div>
-                            <div><b>العنوان:</b> ${info.CompanyAddress || '---'}</div>
-                            <div style="grid-column: span 2;"><b>تاريخ الانتهاء:</b> ${item.E || 'دائم (مدى الحياة)'}</div>
-                        </div>
-                    </details>
+                    <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px;">
+                        <span class="badge badge-${durInfo.status}">⏰ ${durInfo.label}</span>
+                        <span class="badge badge-green">🎨 ${themeName}</span>
+                    </div>
+                    
+                    <div style="font-size: 11px; opacity: 0.7; margin-bottom: 5px;">📦 ${getActiveModules(item)}</div>
+                    ${item.Notes ? `<div style="font-size: 11px; background: rgba(0,0,0,0.2); padding: 6px; border-radius: 6px; border-right: 2px solid var(--primary); margin-top: 8px;">📝 ${item.Notes}</div>` : ''}
                 </div>
                 `;
-            }).join('') : '<p style="text-align: center; opacity: 0.5;">لا يوجد سجلات</p>';
+
+                if (isDeleted) deletedList.push(html);
+                else activeList.push(html);
+            });
+
+            if($('statTotal')) $('statTotal').innerText = totalActive;
+            if($('statActive')) $('statActive').innerText = activeCount;
+            if($('statExpired')) $('statExpired').innerText = expiredCount;
+
+            $('historyList').innerHTML = activeList.length ? activeList.join('') : '<p style="text-align: center; opacity: 0.5; padding: 20px;">لا يوجد سجلات نشطة</p>';
+            
+            if ($('deletedTitle') && $('deletedList')) {
+                if (deletedList.length > 0) {
+                    $('deletedTitle').style.display = 'block';
+                    $('deletedList').innerHTML = deletedList.join('');
+                } else {
+                    $('deletedTitle').style.display = 'none';
+                    $('deletedList').innerHTML = '';
+                }
+            }
         }
+
+        window.deleteRecord = (timestamp) => {
+            if (!confirm('هل تريد نقل هذا السجل إلى سلة المحذوفات؟')) return;
+            let history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
+            const idx = history.findIndex(h => h.Timestamp === timestamp);
+            if (idx !== -1) {
+                history[idx].IsDeleted = true;
+                history[idx].DeletedAt = new Date().toISOString();
+                localStorage.setItem('cashix_history', JSON.stringify(history));
+                if (fbRef) fbRef.set(history);
+                renderHistory();
+            }
+        };
+
+        window.restoreRecord = (timestamp) => {
+            let history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
+            const idx = history.findIndex(h => h.Timestamp === timestamp);
+            if (idx !== -1) {
+                history[idx].IsDeleted = false;
+                delete history[idx].DeletedAt;
+                localStorage.setItem('cashix_history', JSON.stringify(history));
+                if (fbRef) fbRef.set(history);
+                renderHistory();
+            }
+        };
+
+        window.closeModal = () => {
+            $('previewModal').style.display = 'none';
+        };
+
+        window.previewRecord = (timestamp) => {
+            let history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
+            const item = history.find(h => h.Timestamp === timestamp);
+            if (!item) return;
+
+            const info = item.MachineInfo || {};
+            const durInfo = getDurationInfo(item);
+            const themes = { 0: '🛒 تجزئة/سوبرماركت', 1: '👔 ملابس (Wear POS)', 2: '💊 صيدلية (Smart Cure)' };
+            const themeName = themes[item.T] || '---';
+
+            $('modalBody').innerHTML = `
+                <div class="modal-section">
+                    <div class="modal-section-title">🏢 معلومات المنشأة</div>
+                    <div class="modal-grid">
+                        <div><b>الشركة:</b> ${info.CompanyName || '---'}</div>
+                        <div><b>المدير:</b> ${info.CompanyManager || '---'}</div>
+                        <div><b>الهاتف:</b> ${info.CompanyPhone || '---'}</div>
+                        <div><b>الجوال:</b> ${info.CompanyMobile || '---'}</div>
+                        <div style="grid-column: span 2;"><b>العنوان:</b> ${info.CompanyAddress || '---'}</div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <div class="modal-section-title">🖥️ معلومات الجهاز</div>
+                    <div class="modal-grid">
+                        <div><b>اسم الجهاز:</b> ${info.ComputerName || '---'}</div>
+                        <div><b>الرام:</b> ${formatRam(info.RamAmount)}</div>
+                        <div style="grid-column: span 2;"><b>المعالج:</b> <span style="font-family: monospace; font-size: 10px;">${info.ProcessorId || '---'}</span></div>
+                        <div style="grid-column: span 2;"><b>القرص الصلب:</b> <span style="font-family: monospace; font-size: 10px;">${info.HDDId || '---'}</span></div>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <div class="modal-section-title">🔑 معلومات التفعيل</div>
+                    <div class="modal-grid">
+                        <div><b>الثيم:</b> ${themeName}</div>
+                        <div><b>المدة:</b> <span class="badge badge-${durInfo.status}">${durInfo.label}</span></div>
+                        <div style="grid-column: span 2;"><b>الأقسام المفعلة:</b> <br><span style="color:var(--primary); font-weight:bold;">${getActiveModules(item)}</span></div>
+                        <div style="grid-column: span 2;"><b>تاريخ الإصدار:</b> ${new Date(item.Timestamp).toLocaleString('ar-EG')}</div>
+                        ${item.Notes ? `<div style="grid-column: span 2; margin-top: 5px;"><b>📝 ملاحظات:</b> ${item.Notes}</div>` : ''}
+                    </div>
+                </div>
+
+                <div class="modal-section" style="word-break: break-all;">
+                    <div class="modal-section-title">🔐 كود التفعيل</div>
+                    ${item.IsDeleted ? `<div style="color: #ff4b2b; text-align: center; padding: 10px;">السجل محذوف - لا يمكن عرض كود التفعيل</div>` : `
+                    <div style="font-family: monospace; font-size: 11px; background: rgba(0,242,96,0.1); padding: 10px; border-radius: 8px; border: 1px dashed var(--success); color: var(--success);">
+                        ${item.Key}
+                    </div>
+                    <button style="width: 100%; margin-top: 10px; background: var(--success); color: #000; padding: 8px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold;" onclick="copyText('${item.Key}')">نسخ الكود 📋</button>
+                    `}
+                </div>
+            `;
+            $('previewModal').style.display = 'flex';
+            
+            $('btnPrintModal').onclick = () => {
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(`
+                    <html dir="rtl" lang="ar">
+                    <head>
+                        <title>طباعة سجل التفعيل - ${info.CompanyName || 'Cashix'}</title>
+                        <style>
+                            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; line-height: 1.6; }
+                            h1 { color: #333; text-align: center; border-bottom: 2px solid #00d2ff; padding-bottom: 10px; }
+                            .section { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+                            .section-title { font-weight: bold; font-size: 18px; margin-bottom: 10px; color: #0056b3; }
+                            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+                            .key-box { background: #f9f9f9; padding: 15px; border: 1px dashed #ccc; word-break: break-all; font-family: monospace; font-size: 12px; }
+                            @media print { button { display: none; } }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>شهادة تفعيل نظام Cashix</h1>
+                        <div class="section">
+                            <div class="section-title">معلومات المنشأة</div>
+                            <div class="grid">
+                                <div><b>الشركة:</b> ${info.CompanyName || '---'}</div>
+                                <div><b>المدير:</b> ${info.CompanyManager || '---'}</div>
+                                <div><b>الهاتف:</b> ${info.CompanyPhone || '---'}</div>
+                                <div><b>الجوال:</b> ${info.CompanyMobile || '---'}</div>
+                                <div style="grid-column: span 2;"><b>العنوان:</b> ${info.CompanyAddress || '---'}</div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <div class="section-title">تفاصيل الترخيص</div>
+                            <div class="grid">
+                                <div><b>تاريخ الإصدار:</b> ${new Date(item.Timestamp).toLocaleString('ar-EG')}</div>
+                                <div><b>تاريخ الانتهاء:</b> ${item.E || 'مدى الحياة'}</div>
+                                <div><b>النسخة/الثيم:</b> ${themeName}</div>
+                                <div><b>الأقسام:</b> ${getActiveModules(item)}</div>
+                            </div>
+                        </div>
+                        ${!item.IsDeleted ? `
+                        <div class="section">
+                            <div class="section-title">كود التفعيل الخاص بالجهاز (${info.ComputerName || '---'})</div>
+                            <div class="key-box">${item.Key}</div>
+                        </div>` : ''}
+                        <div style="text-align: center; margin-top: 30px; font-size: 12px; color: #777;">
+                            هذه الوثيقة تم إنشاؤها آلياً من نظام Cashix Master Keygen
+                        </div>
+                        <button onclick="window.print()" style="display: block; margin: 20px auto; padding: 10px 20px; font-size: 16px; cursor: pointer;">طباعة</button>
+                    </body>
+                    </html>
+                `);
+                printWindow.document.close();
+            };
+        };
 
         window.copyText = (text) => {
             navigator.clipboard.writeText(text).then(() => alert('تم نسخ كود التفعيل!'));
@@ -638,10 +934,34 @@
             $('mod3').checked = item.M3 || false;
             $('mod4').checked = item.M4 || false;
             $('mod5').checked = item.M5 || false;
+            $('recordNotes').value = item.Notes || '';
 
             switchTab('gen');
             window.scrollTo(0, 0);
             alert('قم بتعديل الأقسام ثم اضغط على "توليد كود التفعيل" ليتم تحديث السجل بدل إضافته كجديد.');
+        };
+
+        // --- Events & Buttons ---
+        $('searchHistory').addEventListener('input', renderHistory);
+
+        $('btnClearHistory').onclick = () => {
+            let history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
+            const activeRecords = history.filter(h => !h.IsDeleted);
+            if (activeRecords.length === 0) return alert('لا توجد سجلات نشطة لنقلها للمحذوفات');
+            
+            if (!confirm('هل أنت متأكد من نقل كافة السجلات النشطة إلى سلة المحذوفات؟')) return;
+            
+            history = history.map(item => {
+                if (!item.IsDeleted) {
+                    item.IsDeleted = true;
+                    item.DeletedAt = new Date().toISOString();
+                }
+                return item;
+            });
+            
+            localStorage.setItem('cashix_history', JSON.stringify(history));
+            if (fbRef) fbRef.set(history);
+            renderHistory();
         };
 
         // --- Export / Import ---
