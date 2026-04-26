@@ -311,6 +311,77 @@
         }
 
         /* New CSS */
+        /* === Expiry Warning Banner === */
+        .expiry-banner {
+            display: none;
+            background: linear-gradient(135deg, rgba(255,193,7,0.15), rgba(255,75,43,0.1));
+            border: 1px solid rgba(255,193,7,0.4);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            animation: pulseWarn 2.5s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        .expiry-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,193,7,0.06), transparent);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+        @keyframes pulseWarn {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,193,7,0.25); }
+            50% { box-shadow: 0 0 0 6px rgba(255,193,7,0); }
+        }
+        .expiry-banner-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: #ffc107;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .expiry-banner-dismiss {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            width: auto;
+            box-shadow: none;
+            line-height: 1;
+        }
+        .expiry-banner-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .expiry-banner-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+        .expiry-banner-list li .company { color: #fff; font-weight: bold; }
+        .expiry-banner-list li .days-left { color: #ffc107; font-size: 11px; }
+        /* === End Expiry Warning Banner === */
+
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.8); z-index: 10000;
@@ -378,9 +449,18 @@
             <span id="syncText">مزامنة سحابية: غير مفعلة</span>
         </div>
 
+        <!-- Expiry Warning Banner -->
+        <div class="expiry-banner" id="expiryBanner">
+            <div class="expiry-banner-title">
+                <span id="expiryBannerTitle">⚠️ تراخيص تنتهي قريباً</span>
+                <button class="expiry-banner-dismiss" onclick="dismissExpiryBanner()" title="إغلاق">✕</button>
+            </div>
+            <ul class="expiry-banner-list" id="expiryBannerList"></ul>
+        </div>
+
         <div class="tabs">
             <div class="tab active" id="tabGen">توليد</div>
-            <div class="tab" id="tabHistory">السجل</div>
+            <div class="tab" id="tabHistory">السجل <span id="tabHistoryBadge" style="display:none; background:#ffc107; color:#000; font-size:9px; font-weight:bold; border-radius:20px; padding:1px 5px; vertical-align:middle;"></span></div>
             <div class="tab" id="tabSettings">الإعدادات</div>
         </div>
 
@@ -733,11 +813,13 @@
                     <div style="font-size: 14px; font-weight: bold; color: var(--secondary);">${info.CompanyName || 'عميل غير معروف'}</div>
                     <div style="font-size: 12px; opacity: 0.8; margin-bottom: 10px;">👤 ${info.CompanyManager || '---'} | 🖥️ ${info.ComputerName || item.MachineId.substring(0, 8)}</div>
                     
-                    <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px;">
+                    <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 6px;">
                         <span class="badge badge-${durInfo.status}">⏰ ${durInfo.label}</span>
                         <span class="badge badge-green">🎨 ${themeName}</span>
                     </div>
-                    
+                    <div style="font-size: 11px; opacity: 0.55; margin-bottom: 8px;">
+                        📅 ${item.E ? (() => { const d = new Date(item.E); return `تاريخ الانتهاء: ${d.toLocaleDateString('ar-EG', {year:'numeric', month:'long', day:'numeric'})}`; })() : 'ترخيص مدى الحياة ♾️'}
+                    </div>
                     <div style="font-size: 11px; opacity: 0.7; margin-bottom: 5px;">📦 ${getActiveModules(item)}</div>
                     ${item.Notes ? `<div style="font-size: 11px; background: rgba(0,0,0,0.2); padding: 6px; border-radius: 6px; border-right: 2px solid var(--primary); margin-top: 8px;">📝 ${item.Notes}</div>` : ''}
                 </div>
@@ -941,6 +1023,60 @@
             alert('قم بتعديل الأقسام ثم اضغط على "توليد كود التفعيل" ليتم تحديث السجل بدل إضافته كجديد.');
         };
 
+        // --- Expiry Alert Banner Logic ---
+        function checkExpiryWarnings() {
+            const history = JSON.parse(localStorage.getItem('cashix_history') || '[]');
+            const now = new Date();
+            const WARN_DAYS = 30;
+
+            const expiringSoon = history.filter(item => {
+                if (item.IsDeleted || !item.E) return false;
+                const exp = new Date(item.E);
+                const diff = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+                return diff >= 0 && diff <= WARN_DAYS;
+            }).sort((a, b) => new Date(a.E) - new Date(b.E));
+
+            const badge = $('tabHistoryBadge');
+            const banner = $('expiryBanner');
+            const list = $('expiryBannerList');
+            const title = $('expiryBannerTitle');
+
+            if (expiringSoon.length === 0) {
+                badge.style.display = 'none';
+                banner.style.display = 'none';
+                return;
+            }
+
+            // Update tab badge
+            badge.style.display = 'inline';
+            badge.textContent = expiringSoon.length;
+
+            // Build banner list
+            title.innerHTML = `⚠️ ${expiringSoon.length} ترخيص ${expiringSoon.length === 1 ? 'سينتهي' : 'ستنتهي'} خلال 30 يوم <button class="expiry-banner-dismiss" onclick="dismissExpiryBanner()" title="إغلاق">✕</button>`;
+            list.innerHTML = expiringSoon.map(item => {
+                const info = item.MachineInfo || {};
+                const exp = new Date(item.E);
+                const diff = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+                const company = info.CompanyName || 'عميل غير معروف';
+                const daysText = diff === 0 ? 'ينتهي اليوم!' : `${diff} يوم متبقٍ`;
+                const color = diff <= 7 ? '#ff4b2b' : '#ffc107';
+                return `<li>
+                    <span class="company">${company}</span>
+                    <span class="days-left" style="color:${color}; font-weight:bold;">⏳ ${daysText}</span>
+                </li>`;
+            }).join('');
+
+            // Show banner if not dismissed in this session
+            if (!sessionStorage.getItem('expiryBannerDismissed')) {
+                banner.style.display = 'block';
+            }
+        }
+
+        window.dismissExpiryBanner = () => {
+            $('expiryBanner').style.display = 'none';
+            sessionStorage.setItem('expiryBannerDismissed', '1');
+        };
+
         // --- Events & Buttons ---
         $('searchHistory').addEventListener('input', renderHistory);
 
@@ -1112,6 +1248,7 @@
             initFirebase();
             updateDebugInfo();
             renderHistory();
+            checkExpiryWarnings();
 
             const durSelect = $('durationSelect');
             const customBox = $('customDaysContainer');
